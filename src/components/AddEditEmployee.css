@@ -1,67 +1,29 @@
-/* Styling for the Home Page */
+/* Styling for the AddEditEmployee component */
 
-/* Page container */
-.home-page {
-  padding: 20px;
-  margin: auto;
-  max-width: 1200px;
-}
-
-/* Heading styles */
-.home-page h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #007bff;
-}
-
-/* Employee List styles */
-.employee-list {
-  margin-bottom: 20px;
-}
-
-.employee-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-bottom: 10px;
-}
-
-.employee-item span {
-  margin-right: 10px;
-}
-
-.delete-button {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-/* Add/Edit Employee Form styles */
 .add-edit-employee-form {
   background-color: #f9f9f9;
-  padding: 20px;
+  padding: 50px;
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 93%;
 }
 
 .add-edit-employee-form h2 {
-  font-size: 20px;
+  font-size: 24px;
   margin-bottom: 15px;
+  color: #007bff;
 }
 
 .form-group {
   margin-bottom: 15px;
+  width: 90%;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  color: #555;
 }
 
 .form-control {
@@ -75,6 +37,7 @@
 .form-control:focus {
   outline: none;
   border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.2);
 }
 
 .button-container {
