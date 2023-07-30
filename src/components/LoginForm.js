@@ -1,16 +1,29 @@
 import React, { useState } from "react";
+import { verifyHRUser } from "../api/employee";
 
 const LoginForm = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleLogin = () => {
-    if (username && password) {
-      alert("Login successful!");
-      setErrorMessage("");
+  const handleLogin = async () => {
+    if (email && password) {
+      try {
+        const response = await verifyHRUser(email, password);
+
+        if (response === false) {
+          setErrorMessage("Invalid email or password.");
+        } else {
+          window.location.href = "/dashboard";
+        }
+
+        setErrorMessage("");
+      } catch (error) {
+        console.error("Error while verifying HR user:", error);
+        setErrorMessage("Error occurred while verifying HR user.");
+      }
     } else {
-      setErrorMessage("Please enter a valid username and password.");
+      setErrorMessage("Please enter a valid email and password.");
     }
   };
 
@@ -19,11 +32,11 @@ const LoginForm = () => {
       <h1>Login</h1>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       <div className="form-group">
-        <label>Username:</label>
+        <label>Email:</label>
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className="form-control"
         />
       </div>
