@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { verifyHRUser } from "../api/employee";
 
-const LoginForm = () => {
+const LoginForm = ({ setLoggedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -14,10 +14,10 @@ const LoginForm = () => {
         if (response === false) {
           setErrorMessage("Invalid email or password.");
         } else {
-          window.location.href = "/dashboard";
+          setErrorMessage("");
+          setLoggedIn(true);
+          console.log("Login successful.");
         }
-
-        setErrorMessage("");
       } catch (error) {
         console.error("Error while verifying HR user:", error);
         setErrorMessage("Error occurred while verifying HR user.");
