@@ -71,7 +71,14 @@ const AddEditEmployee = ({
 
   return (
     <div className="add-edit-employee-form">
-      <h2>{employee ? "Edit Employee" : "Add Employee"}</h2>
+      <h2
+        style={{
+          textAlign: "center",
+          color: "black",
+        }}
+      >
+        {employee ? "Edit Employee" : "Add Employee"}
+      </h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Name:</label>
@@ -114,7 +121,19 @@ const AddEditEmployee = ({
           />
         </div>
         <div className="button-container">
-          <button type="submit" className="submit-button">
+          <button
+            type="submit"
+            className="submit-button"
+            style={{
+              backgroundColor: "#ff8040",
+              color: "white",
+              padding: "14px 20px",
+              margin: "8px 0",
+              border: "none",
+              cursor: "pointer",
+              width: "100%",
+            }}
+          >
             {employee ? "Save Changes" : "Add Employee"}
           </button>
           {employee && (

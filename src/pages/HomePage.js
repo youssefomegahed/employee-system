@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import EmployeeList from "../components/EmployeeList";
 import AddEditEmployee from "../components/AddEditEmployee";
 import AddAttendance from "../components/AddAttendance";
+import { addEmployee as addEmployeeAPI } from "../api/employee";
 import "./HomePage.css";
 
 const HomePage = () => {
@@ -26,8 +27,23 @@ const HomePage = () => {
 
   const [attendanceDate, setAttendanceDate] = useState(null);
 
-  const addEmployee = (employee) => {
-    setEmployees([...employees, employee]);
+  const addEmployee = async (employee) => {
+    try {
+      const name = employee.name;
+      const email = employee.email;
+      const password = employee.password;
+      const group = employee.group;
+
+      const response = await addEmployeeAPI(name, email, password, group);
+      if (response === false) {
+        alert("This email is already registered.");
+      } else {
+        setEmployees((prevEmployees) => [...prevEmployees, employee]);
+      }
+    } catch (error) {
+      console.error("Error adding employee:", error);
+      alert("An error occurred while adding the employee.");
+    }
   };
 
   const editEmployeeData = (updatedEmployee) => {
@@ -62,13 +78,13 @@ const HomePage = () => {
         onAddEmployee={addEmployee}
         onEditEmployee={editEmployeeData}
       />
-      {/*
+
       <AddAttendance
         employees={employees}
         selectedDate={attendanceDate}
         onAddAttendance={addAttendance}
         onDateChange={setAttendanceDate}
-      /> */}
+      />
     </div>
   );
 };

@@ -1,14 +1,15 @@
-/* Styling for the AddEditEmployee component */
+/* Styling for the AddAttendance component */
 
-.add-edit-employee-form {
+.add-attendance-form {
   background-color: #f9f9f9;
   padding: 50px;
   border-radius: 5px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 93%;
+  width: 71%;
+  margin-top: 30px;
 }
 
-.add-edit-employee-form h2 {
+.add-attendance-form h2 {
   font-size: 24px;
   margin-bottom: 15px;
   color: #ff8040;
@@ -37,12 +38,13 @@
 .form-control:focus {
   outline: none;
   border-color: #ff8040;
-  box-shadow: 0 0 0 2px rgba(255, 81, 0, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 128, 64, 0.2);
 }
 
 .button-container {
   display: flex;
   justify-content: flex-end;
+  margin-top: 20px;
 }
 
 .submit-button,
