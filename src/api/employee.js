@@ -1,4 +1,4 @@
-const server = "http://192.168.1.3:3000";
+const server = "https://employee-system-backend.onrender.com";
 
 export function verifyHRUser(email, password) {
   return fetch(`${server}/verifyHRUser`, {
