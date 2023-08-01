@@ -1,31 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import LoadingOverlay from "react-loading-overlay";
 import EmployeeList from "../components/EmployeeList";
 import AddEditEmployee from "../components/AddEditEmployee";
 import AddAttendance from "../components/AddAttendance";
-import { addEmployee as addEmployeeAPI } from "../api/employee";
+import {
+  addEmployee as addEmployeeAPI,
+  updateEmployees,
+  getEmployees,
+  deleteEmployee as deleteEmployeeAPI,
+} from "../api/employee";
 import "./HomePage.css";
 
-const HomePage = () => {
-  const [employees, setEmployees] = useState([
-    {
-      _id: 1,
-      name: "John Doe",
-      email: "john@gmail.com",
-      password: "mypass",
-      group: "HR",
-    },
-    {
-      _id: 2,
-      name: "Jane Doe",
-      email: "jane@gmail.com",
-      password: "mypass",
-      group: "Normal Employee",
-    },
-  ]);
+const HomePage = ({ user }) => {
+  const [employees, setEmployees] = useState([]);
 
   const [editEmployee, setEditEmployee] = useState(null);
 
   const [attendanceDate, setAttendanceDate] = useState(null);
+
+  const [loading, setLoading] = useState(false);
+
+  const [showAddEmployeeModal, setShowAddEmployeeModal] = useState(false);
+  const [showAddAttendanceModal, setShowAddAttendanceModal] = useState(false);
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        setLoading(true);
+        const employees = await getEmployees();
+        setLoading(false);
+        if (employees === false) {
+          alert("An error occurred while fetching employees.");
+          return;
+        }
+        setEmployees(employees);
+      } catch (error) {
+        console.error("Error fetching employees:", error);
+      }
+    };
+    fetchEmployees();
+  }, []);
 
   const addEmployee = async (employee) => {
     try {
@@ -38,7 +52,8 @@ const HomePage = () => {
       if (response === false) {
         alert("This email is already registered.");
       } else {
-        setEmployees((prevEmployees) => [...prevEmployees, employee]);
+        setEmployees([...employees, response]);
+        setShowAddEmployeeModal(false);
       }
     } catch (error) {
       console.error("Error adding employee:", error);
@@ -48,43 +63,153 @@ const HomePage = () => {
 
   const editEmployeeData = (updatedEmployee) => {
     if (updatedEmployee === null) return;
+
     const updatedEmployees = employees.map((employee) =>
       employee._id === updatedEmployee._id ? updatedEmployee : employee
     );
-    setEmployees(updatedEmployees);
-    setEditEmployee(null);
+
+    try {
+      setLoading(true);
+      updateEmployees(updatedEmployees);
+      setLoading(false);
+      setEmployees(updatedEmployees);
+      setEditEmployee(null);
+      setShowAddEmployeeModal(false);
+    } catch (error) {
+      console.error("Error updating employees:", error);
+      alert("An error occurred while updating the employees.");
+    }
   };
 
   const deleteEmployee = (id) => {
-    const updatedEmployees = employees.filter(
-      (employee) => employee._id !== id
-    );
-    setEmployees(updatedEmployees);
+    if (id === user._id) {
+      alert("You cannot delete your own account!");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      deleteEmployeeAPI(id);
+      setLoading(false);
+      setEmployees(employees.filter((employee) => employee._id !== id));
+    } catch (error) {
+      console.error("Error deleting employee:", error);
+      alert("An error occurred while deleting the employee.");
+    }
   };
 
-  const addAttendance = (employeeId, date) => {};
+  const addAttendance = (attendanceData) => {
+    if (attendanceData === null) return;
+
+    const { date, employeeId, status } = attendanceData;
+
+    const updatedEmployees = employees.map((employee) => {
+      if (employee._id === employeeId) {
+        employee.attendance.push({ date, status });
+      }
+      return employee;
+    });
+
+    try {
+      setLoading(true);
+      updateEmployees(updatedEmployees);
+      setLoading(false);
+      setEmployees(updatedEmployees);
+      setShowAddAttendanceModal(false);
+    } catch (error) {
+      console.error("Error updating employees:", error);
+      alert("An error occurred while updating the employees.");
+    }
+  };
 
   return (
-    <div>
+    <div
+      style={{
+        filter: loading ? "brightness(50%)" : "brightness(100%)",
+      }}
+    >
       <EmployeeList
         employees={employees}
         onEditEmployee={setEditEmployee}
         onDeleteEmployee={deleteEmployee}
+        setShowAddEmployeeModal={setShowAddEmployeeModal}
+        user={user}
       />
 
-      <AddEditEmployee
-        employee={editEmployee}
-        setEmployee={setEditEmployee}
-        onAddEmployee={addEmployee}
-        onEditEmployee={editEmployeeData}
-      />
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <LoadingOverlay active={loading} spinner></LoadingOverlay>
+      </div>
 
-      <AddAttendance
-        employees={employees}
-        selectedDate={attendanceDate}
-        onAddAttendance={addAttendance}
-        onDateChange={setAttendanceDate}
-      />
+      <div
+        style={{
+          marginTop: "20px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <button onClick={() => setShowAddEmployeeModal(true)}>
+          Add Employee
+        </button>
+
+        <div
+          style={{
+            width: "20px",
+          }}
+        ></div>
+
+        <button onClick={() => setShowAddAttendanceModal(true)}>
+          Add Attendance
+        </button>
+      </div>
+
+      {/* Modal for Add Employee */}
+      {showAddEmployeeModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <span
+              className="close"
+              onClick={() => setShowAddEmployeeModal(false)}
+            >
+              &times;
+            </span>
+            <AddEditEmployee
+              employee={editEmployee}
+              setEmployee={setEditEmployee}
+              onAddEmployee={addEmployee}
+              onEditEmployee={editEmployeeData}
+              setShowAddEmployeeModal={setShowAddEmployeeModal}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Modal for Add Attendance */}
+      {showAddAttendanceModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <span
+              className="close"
+              onClick={() => setShowAddAttendanceModal(false)}
+            >
+              &times;
+            </span>
+            <AddAttendance
+              employees={employees}
+              selectedDate={attendanceDate}
+              onAddAttendance={addAttendance}
+              onDateChange={setAttendanceDate}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

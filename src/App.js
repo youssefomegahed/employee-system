@@ -3,10 +3,10 @@ import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 
 function App() {
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [user, setUser] = React.useState(null);
   return (
     <div>
-      {loggedIn ? <HomePage /> : <LoginPage setLoggedIn={setLoggedIn} />}
+      {user ? <HomePage user={user} /> : <LoginPage setUser={setUser} />}
     </div>
   );
 }

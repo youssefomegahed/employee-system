@@ -6,6 +6,7 @@ const AddEditEmployee = ({
   setEmployee,
   onAddEmployee,
   onEditEmployee,
+  setShowAddEmployeeModal,
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -103,7 +104,7 @@ const AddEditEmployee = ({
         <div className="form-group">
           <label>Password:</label>
           <input
-            type="text"
+            type="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
@@ -142,6 +143,7 @@ const AddEditEmployee = ({
               className="cancel-button"
               onClick={() => {
                 setEmployee(null);
+                setShowAddEmployeeModal(false);
               }}
             >
               Cancel

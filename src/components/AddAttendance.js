@@ -25,7 +25,6 @@ const AddAttendance = ({
   };
 
   const handleSubmit = (e) => {
-    console.log(attendanceData);
     e.preventDefault();
     if (
       !attendanceData.employeeName ||
@@ -66,7 +65,7 @@ const AddAttendance = ({
           >
             <option value="">Select an employee</option>
             {employees.map((employee) => (
-              <option key={employee.id} value={employee.id}>
+              <option key={employee._id} value={employee._id}>
                 {employee.name}
               </option>
             ))}

@@ -2,10 +2,10 @@ import React from "react";
 import LoginForm from "../components/LoginForm";
 import "./LoginPage.css";
 
-const LoginPage = ({ setLoggedIn }) => {
+const LoginPage = ({ setUser }) => {
   return (
     <div>
-      <LoginForm setLoggedIn={setLoggedIn} />
+      <LoginForm setUser={setUser} />
     </div>
   );
 };

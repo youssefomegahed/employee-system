@@ -1,13 +1,20 @@
 import React from "react";
 import "./EmployeeList.css"; // Import the EmployeeList.css
 
-const EmployeeList = ({ employees, onEditEmployee, onDeleteEmployee }) => {
+const EmployeeList = ({
+  employees,
+  onEditEmployee,
+  onDeleteEmployee,
+  setShowAddEmployeeModal,
+  user,
+}) => {
   return (
     <div className="employee-list">
       {employees.length === 0 ? (
         <p
           style={{
             color: "white",
+            textAlign: "center",
           }}
         >
           No employees found.
@@ -21,7 +28,7 @@ const EmployeeList = ({ employees, onEditEmployee, onDeleteEmployee }) => {
               marginBottom: "50px",
             }}
           >
-            Employees
+            Hello, {user.name.split(" ")[0]}!
           </h2>
 
           <ul>
@@ -35,7 +42,14 @@ const EmployeeList = ({ employees, onEditEmployee, onDeleteEmployee }) => {
               >
                 <span>{employee.name}</span>
                 <div>
-                  <button onClick={() => onEditEmployee(employee)}>Edit</button>
+                  <button
+                    onClick={() => {
+                      onEditEmployee(employee);
+                      setShowAddEmployeeModal(true);
+                    }}
+                  >
+                    Edit
+                  </button>
                   <button
                     onClick={() => onDeleteEmployee(employee._id)}
                     className="delete-button"
